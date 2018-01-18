@@ -7,13 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class Editar extends Activity {
 
-    protected EditText etNome, etQuantidade;
+    protected AutoCompleteTextView etNome;
+    protected EditText etQuantidade;
     protected Button btnEditar;
     protected Adaptador a;
     protected Cursor cursor;
@@ -35,7 +37,7 @@ public class Editar extends Activity {
         oIntent = getIntent();
         _id = oIntent.getExtras().getInt("_id");
 
-        etNome = (EditText) findViewById(R.id.etNome);
+        etNome = (AutoCompleteTextView) findViewById(R.id.etNome);
         etQuantidade = (EditText) findViewById(R.id.etQuantidade);
         a = new Adaptador(this).open();
         cursor = a.obterDados(_id);
@@ -47,6 +49,9 @@ public class Editar extends Activity {
         }
 
         btnEditar = (Button)findViewById(R.id.btnEditar);
+
+        new AsyncGenerator(btnEditar, "zonaporto.com", "xml.xml", 443, etNome, getApplicationContext()).execute(0);
+
         btnEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

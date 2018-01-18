@@ -9,9 +9,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends Activity {
@@ -48,17 +51,24 @@ public class MainActivity extends Activity {
 
         cursor = a.obterTodosRegistos();
 
-        List<String> arr = new ArrayList<>();
+        List<HashMap<String, String>> arr = new ArrayList<>();
 
         if (cursor.moveToFirst()) {
             do {
-                arr.add(cursor.getString(1));
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("material", ""+cursor.getString(1));
+                hashMap.put("quantidade", "Qtd: "+cursor.getInt(2));
+
+                //arr.add(cursor.getString(1));
+                arr.add(hashMap);
             } while (cursor.moveToNext());
         }
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, arr);
+        ListAdapter adapter = new SimpleAdapter(this, arr, R.layout.list_item, new String[]{"material", "quantidade"}, new int[]{R.id.txvMaterial, R.id.txvQuantidade});
+        Lista.setAdapter(adapter);
+
+
 
         Lista.setAdapter(adapter);
 
@@ -73,8 +83,6 @@ public class MainActivity extends Activity {
                 int i = cursor.getInt(0);
 
                 executarOutraActivity(Editar.class, i);
-
-
 
             }
 
